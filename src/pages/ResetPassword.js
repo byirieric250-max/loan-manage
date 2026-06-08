@@ -4,6 +4,15 @@ import { ArrowLeft, Lock, ShieldCheck, X } from 'lucide-react';
 import { authAPI } from '../services/api';
 import { getErrorMessage } from '../utils/errors';
 
+const backgroundImages = [
+  'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1920&h=1080&fit=crop',
+  'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1920&h=1080&fit=crop',
+  'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1920&h=1080&fit=crop',
+  'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=1920&h=1080&fit=crop',
+  'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1920&h=1080&fit=crop',
+  'https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?w=1920&h=1080&fit=crop'
+];
+
 const ResetPassword = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -16,22 +25,13 @@ const ResetPassword = () => {
   const [tokenValid, setTokenValid] = useState(true);
   const [currentBgIndex, setCurrentBgIndex] = useState(0);
 
-  const backgroundImages = [
-    'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1920&h=1080&fit=crop',
-    'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1920&h=1080&fit=crop',
-    'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1920&h=1080&fit=crop',
-    'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=1920&h=1080&fit=crop',
-    'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1920&h=1080&fit=crop',
-    'https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?w=1920&h=1080&fit=crop'
-  ];
-
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentBgIndex((prevIndex) => (prevIndex + 1) % backgroundImages.length);
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [backgroundImages.length]);
+  }, []);
 
   const authPageStyle = {
     backgroundImage: `url(${backgroundImages[currentBgIndex]})`,

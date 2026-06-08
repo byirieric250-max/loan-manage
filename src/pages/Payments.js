@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Calendar, 
   AlertTriangle, 
@@ -16,6 +16,7 @@ import { formatUsdAsRwf } from '../utils/currency';
 import { getErrorMessage } from '../utils/errors';
 
 const Payments = () => {
+  const navigate = useNavigate();
   const [upcomingPayments, setUpcomingPayments] = useState([]);
   const [overduePayments, setOverduePayments] = useState([]);
   const [recentPayments, setRecentPayments] = useState([]);
@@ -26,6 +27,7 @@ const Payments = () => {
   const [selectedLoan, setSelectedLoan] = useState('');
   const [paymentAmount, setPaymentAmount] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('bank_transfer');
+  const [paymentCompleted, setPaymentCompleted] = useState(false);
   const location = useLocation();
 
   const getLoanStatusLabel = (status) => {
@@ -34,6 +36,7 @@ const Payments = () => {
       approved: 'Approved',
       active: 'Active',
       progress: 'In Progress',
+      pending_completion: 'Pending Completion',
       completed: 'Completed',
       rejected: 'Rejected',
       defaulted: 'Defaulted',
@@ -42,7 +45,7 @@ const Payments = () => {
   };
 
   const isPayableLoan = (loan) => ['approved', 'active', 'progress'].includes(loan.status);
-  const isSelectableLoan = (loan) => !['rejected', 'defaulted'].includes(loan.status);
+  const isSelectableLoan = (loan) => !['rejected', 'defaulted', 'pending_completion', 'completed'].includes(loan.status);
 
   const payableLoans = useMemo(
     () => loans.filter(isPayableLoan),
@@ -94,7 +97,15 @@ const Payments = () => {
 
   useEffect(() => {
     fetchPaymentData({ initialLoad: true });
-  }, [fetchPaymentData]);
+    
+    // Check if user is returning from payment processing
+    const searchParams = new URLSearchParams(location.search);
+    if (searchParams.get('payment') === 'completed') {
+      setPaymentCompleted(true);
+      // Clear the flag after showing the message
+      window.history.replaceState({}, '', location.pathname);
+    }
+  }, [fetchPaymentData, location]);
 
   useEffect(() => {
     if (payableLoans.length === 0) {
@@ -118,6 +129,13 @@ const Payments = () => {
     const params = new URLSearchParams(location.search);
     const loanParam = params.get('loan');
     const amountParam = params.get('amount');
+    const paymentCompletedParam = params.get('payment');
+
+    if (paymentCompletedParam === 'completed') {
+      setPaymentCompleted(true);
+      // Clear the URL parameter without reloading
+      window.history.replaceState({}, '', '/payments');
+    }
 
     if (!loanParam) {
       return;
@@ -149,24 +167,8 @@ const Payments = () => {
       return;
     }
 
-    await submitPayment({
-      loan: selectedLoan,
-      amount: paymentAmount,
-      payment_method: paymentMethod,
-    });
-  };
-
-  const submitPayment = async (paymentData) => {
-    try {
-      await repaymentAPI.makePayment(paymentData);
-      await fetchPaymentData();
-      setSelectedLoan('');
-      setPaymentAmount('');
-      alert('Payment successful! Status updated automatically.');
-    } catch (error) {
-      console.error('Payment error:', error);
-      setError(getErrorMessage(error, 'Payment failed'));
-    }
+    // Redirect to PaymentProcessing page with payment details
+    navigate(`/payment-processing?loan=${selectedLoan}&amount=${paymentAmount}&method=${paymentMethod}`);
   };
 
   const handleQuickPay = async (payment) => {
@@ -178,11 +180,8 @@ const Payments = () => {
       return;
     }
 
-    await submitPayment({
-      loan: payment.loan_id,
-      amount: payment.amount,
-      payment_method: paymentMethod,
-    });
+    // Redirect to PaymentProcessing page with payment details
+    navigate(`/payment-processing?loan=${payment.loan_id}&amount=${payment.amount}&method=${paymentMethod}`);
   };
 
   if (loading) {
@@ -239,69 +238,85 @@ const Payments = () => {
 
       <div className="grid grid-2">
         {/* Make Payment */}
-        <div className="card">
-          <h2>Make a Payment</h2>
-          <form onSubmit={handlePayment}>
-            <div className="form-group">
-              <label htmlFor="loan">Select Loan to Pay</label>
-              <select
-                id="loan"
-                value={selectedLoan}
-                onChange={(e) => setSelectedLoan(e.target.value)}
-                required
+        {paymentCompleted ? (
+          <div className="card">
+            <div className="payment-success-message">
+              <CheckCircle size={48} color="#27ae60" />
+              <h2>Payment Completed Successfully!</h2>
+              <p>Your payment has been processed and will be reflected in your account shortly.</p>
+              <button 
+                className="btn btn-primary" 
+                onClick={() => setPaymentCompleted(false)}
               >
-                <option value="">Select a loan</option>
-                {payableLoans.map(loan => (
-                  <option key={loan.id} value={loan.id}>
-                    Loan #{loan.id} - {formatUsdAsRwf(loan.amount)} - {getLoanStatusLabel(loan.status)}
-                  </option>
-                ))}
-              </select>
-              {payableLoans.length === 0 && (
-                <small className="form-help">
-                  No payable loans are available right now.
-                </small>
-              )}
-              {loans.some(loan => !isPayableLoan(loan)) && payableLoans.length > 0 && (
-                <small className="form-help">
-                  Only approved, active, and in-progress loans are shown here.
-                </small>
-              )}
+                Make Another Payment
+              </button>
             </div>
+          </div>
+        ) : (
+          <div className="card">
+            <h2>Make a Payment</h2>
+            <form onSubmit={handlePayment}>
+              <div className="form-group">
+                <label htmlFor="loan">Select Loan to Pay</label>
+                <select
+                  id="loan"
+                  value={selectedLoan}
+                  onChange={(e) => setSelectedLoan(e.target.value)}
+                  required
+                >
+                  <option value="">Select a loan</option>
+                  {payableLoans.map(loan => (
+                    <option key={loan.id} value={loan.id}>
+                      Loan #{loan.id} - {formatUsdAsRwf(loan.amount)} - {getLoanStatusLabel(loan.status)}
+                    </option>
+                  ))}
+                </select>
+                {payableLoans.length === 0 && (
+                  <small className="form-help">
+                    No payable loans are available right now.
+                  </small>
+                )}
+                {loans.some(loan => !isPayableLoan(loan)) && payableLoans.length > 0 && (
+                  <small className="form-help">
+                    Only approved, active, and in-progress loans are shown here.
+                  </small>
+                )}
+              </div>
 
-            <div className="form-group">
-              <label htmlFor="amount">Payment Amount (RWF)</label>
-              <input
-                type="number"
-                id="amount"
-                value={paymentAmount}
-                onChange={(e) => setPaymentAmount(e.target.value)}
-                required
-                placeholder="Enter amount"
-              />
-            </div>
+              <div className="form-group">
+                <label htmlFor="amount">Payment Amount (RWF)</label>
+                <input
+                  type="number"
+                  id="amount"
+                  value={paymentAmount}
+                  onChange={(e) => setPaymentAmount(e.target.value)}
+                  required
+                  placeholder="Enter amount"
+                />
+              </div>
 
-            <div className="form-group">
-              <label htmlFor="method">Payment Method</label>
-              <select
-                id="method"
-                value={paymentMethod}
-                onChange={(e) => setPaymentMethod(e.target.value)}
-                required
-              >
-                <option value="bank_transfer">Bank Transfer</option>
-                <option value="credit_card">Credit Card</option>
-                <option value="debit_card">Debit Card</option>
-                <option value="mobile_money">Mobile Money</option>
-                <option value="check">Check</option>
-              </select>
-            </div>
+              <div className="form-group">
+                <label htmlFor="method">Payment Method</label>
+                <select
+                  id="method"
+                  value={paymentMethod}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                  required
+                >
+                  <option value="bank_transfer">Bank Transfer</option>
+                  <option value="credit_card">Credit Card</option>
+                  <option value="debit_card">Debit Card</option>
+                  <option value="mobile_money">Mobile Money</option>
+                  <option value="check">Check</option>
+                </select>
+              </div>
 
-            <button type="submit" className="btn btn-primary" disabled={payableLoans.length === 0}>
-              Proceed to Payment
-            </button>
-          </form>
-        </div>
+              <button type="submit" className="btn btn-primary" disabled={payableLoans.length === 0}>
+                Proceed to Payment
+              </button>
+            </form>
+          </div>
+        )}
 
         {/* Overdue Payments */}
         <div className="card">

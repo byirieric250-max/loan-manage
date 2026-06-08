@@ -9,6 +9,7 @@ const statusLabels = {
   approved: 'Approved',
   active: 'Active',
   progress: 'In Progress',
+  pending_completion: 'Pending Completion',
   rejected: 'Rejected',
   completed: 'Completed',
   defaulted: 'Defaulted',
@@ -38,6 +39,7 @@ const AdminServices = () => {
     pending: loans.filter((loan) => loan.status === 'pending').length,
     approved: loans.filter((loan) => loan.status === 'approved' || loan.status === 'progress').length,
     active: loans.filter((loan) => loan.status === 'active').length,
+    pending_completion: loans.filter((loan) => loan.status === 'pending_completion').length,
   }), [loans]);
 
   const fetchLoans = async () => {
@@ -47,8 +49,10 @@ const AdminServices = () => {
       setLoans(response.data || []);
       setMessage({ type: '', text: '' });
     } catch (error) {
-      setMessage({ type: 'error', text: getErrorMessage(error, 'Failed to load admin services') });
+      const errorMessage = getErrorMessage(error, 'Failed to load admin services');
+      setMessage({ type: 'error', text: errorMessage });
       setLoans([]);
+      console.error('Fetch loans error:', error);
     } finally {
       setLoading(false);
     }
@@ -60,9 +64,12 @@ const AdminServices = () => {
         paymentFilter && paymentFilter !== 'all' ? { status: paymentFilter } : {},
       );
       setPayments(response.data || []);
+      setMessage({ type: '', text: '' });
     } catch (error) {
-      setMessage({ type: 'error', text: getErrorMessage(error, 'Failed to load payment records') });
+      const errorMessage = getErrorMessage(error, 'Failed to load payment records');
+      setMessage({ type: 'error', text: errorMessage });
       setPayments([]);
+      console.error('Fetch payments error:', error);
     }
   };
 
@@ -70,11 +77,13 @@ const AdminServices = () => {
     setBusyId(id);
     setMessage({ type: '', text: '' });
     try {
-      await action(id);
-      setMessage({ type: 'success', text: successText });
+      const response = await action(id);
+      setMessage({ type: 'success', text: response?.data?.message || successText });
       await fetchLoans();
     } catch (error) {
-      setMessage({ type: 'error', text: getErrorMessage(error, 'Action failed') });
+      const errorMessage = getErrorMessage(error, 'Action failed');
+      setMessage({ type: 'error', text: errorMessage });
+      console.error('Admin action error:', error);
     } finally {
       setBusyId(null);
     }
@@ -85,10 +94,12 @@ const AdminServices = () => {
     setMessage({ type: '', text: '' });
     try {
       const response = await adminServicesAPI.activateAllServices();
-      setMessage({ type: 'success', text: response.data.message || 'All approved services activated' });
+      setMessage({ type: 'success', text: response?.data?.message || 'All approved services activated' });
       await fetchLoans();
     } catch (error) {
-      setMessage({ type: 'error', text: getErrorMessage(error, 'Failed to activate services') });
+      const errorMessage = getErrorMessage(error, 'Failed to activate services');
+      setMessage({ type: 'error', text: errorMessage });
+      console.error('Activate all error:', error);
     } finally {
       setBusyId(null);
     }
@@ -98,11 +109,13 @@ const AdminServices = () => {
     setBusyPaymentId(id);
     setMessage({ type: '', text: '' });
     try {
-      await action(id);
-      setMessage({ type: 'success', text: successText });
+      const response = await action(id);
+      setMessage({ type: 'success', text: response?.data?.message || successText });
       await fetchPayments();
     } catch (error) {
-      setMessage({ type: 'error', text: getErrorMessage(error, 'Payment action failed') });
+      const errorMessage = getErrorMessage(error, 'Payment action failed');
+      setMessage({ type: 'error', text: errorMessage });
+      console.error('Payment action error:', error);
     } finally {
       setBusyPaymentId(null);
     }
@@ -128,7 +141,7 @@ const AdminServices = () => {
         </div>
       )}
 
-      <div className="stats-grid grid grid-3">
+      <div className="stats-grid grid grid-4">
         <div className="card stat-card">
           <div className="stat-value">{stats.pending}</div>
           <div className="stat-label">Pending Review</div>
@@ -140,6 +153,10 @@ const AdminServices = () => {
         <div className="card stat-card">
           <div className="stat-value">{stats.active}</div>
           <div className="stat-label">Active Services</div>
+        </div>
+        <div className="card stat-card">
+          <div className="stat-value">{stats.pending_completion}</div>
+          <div className="stat-label">Pending Completion</div>
         </div>
       </div>
 
@@ -153,6 +170,7 @@ const AdminServices = () => {
               <option value="approved">Approved</option>
               <option value="progress">In Progress</option>
               <option value="active">Active</option>
+              <option value="pending_completion">Pending Completion</option>
               <option value="rejected">Rejected</option>
             </select>
           </div>
@@ -342,8 +360,22 @@ const AdminServices = () => {
                     Activate Service
                   </button>
                 )}
+                {loan.status === 'pending_completion' && (
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    disabled={busyId === loan.id}
+                    onClick={() => runAction(loan.id, adminServicesAPI.confirmLoanCompletion, 'Loan completion confirmed')}
+                  >
+                    <CheckCircle size={18} />
+                    Confirm Completion
+                  </button>
+                )}
                 {loan.status === 'active' && (
                   <button type="button" className="btn btn-secondary" disabled>Service Active</button>
+                )}
+                {loan.status === 'completed' && (
+                  <button type="button" className="btn btn-success" disabled>Loan Completed</button>
                 )}
               </div>
             </div>

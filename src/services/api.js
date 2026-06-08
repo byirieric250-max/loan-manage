@@ -92,6 +92,7 @@ export const adminServicesAPI = {
   approveLoan: (id) => api.post(`/api/admin/loan-applications/${id}/approve/`),
   rejectLoan: (id, data = {}) => api.post(`/api/admin/loan-applications/${id}/reject/`, data),
   activateLoan: (id) => api.post(`/api/admin/loan-applications/${id}/activate/`),
+  confirmLoanCompletion: (id, data = {}) => api.post(`/api/admin/loan-applications/${id}/confirm-completion/`, data),
   activateAllServices: () => api.post('/api/admin/services/activate-all/'),
   getPayments: (params) => api.get('/api/admin/payments/', { params }),
   markPaymentPaid: (id) => api.post(`/api/admin/payments/${id}/paid/`),
@@ -114,6 +115,8 @@ export const notificationsAPI = {
   getAll: () => api.get('/api/notifications/'),
   markAsRead: (id) => api.post(`/api/notifications/${id}/read/`),
   markAllAsRead: () => api.post('/api/notifications/read-all/'),
+  savePreferences: (data) => api.put('/api/notifications/preferences/save/', data),
+  getPreferences: () => api.get('/api/notifications/preferences/'),
 };
 
 export default api;

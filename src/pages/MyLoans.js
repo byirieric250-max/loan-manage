@@ -45,19 +45,6 @@ const MyLoans = () => {
     return loan.status === filter;
   });
 
-  const getStatusBadge = (status) => {
-    const statusMap = {
-      pending: 'pending',
-      approved: 'approved',
-      rejected: 'rejected',
-      active: 'active',
-      progress: 'progress',
-      completed: 'done',
-      defaulted: 'defaulted',
-    };
-    return `badge-${statusMap[status] || 'info'}`;
-  };
-
   const getStatusLabel = (status) => {
     const labels = {
       pending: 'Pending Review',
@@ -69,6 +56,19 @@ const MyLoans = () => {
       defaulted: 'Defaulted',
     };
     return labels[status] || status;
+  };
+
+  const getStatusBadge = (status) => {
+    const statusMap = {
+      pending: 'pending',
+      approved: 'approved',
+      rejected: 'rejected',
+      active: 'active',
+      progress: 'progress',
+      completed: 'done',
+      defaulted: 'defaulted',
+    };
+    return `badge-${statusMap[status] || 'info'}`;
   };
 
   const getCrbStatusLabel = (loan) => {

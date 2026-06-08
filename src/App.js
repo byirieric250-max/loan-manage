@@ -18,6 +18,7 @@ import LoanApplication from './pages/LoanApplication';
 import MyLoans from './pages/MyLoans';
 import RepaymentSchedule from './pages/RepaymentSchedule';
 import Payments from './pages/Payments';
+import PaymentProcessing from './pages/PaymentProcessing';
 import Notifications from './pages/Notifications';
 import About from './pages/About';
 import Contact from './pages/Contact';
@@ -164,6 +165,14 @@ function App() {
                     element={
                       <ProtectedRoute>
                         <Payments />
+                      </ProtectedRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/payment-processing" 
+                    element={
+                      <ProtectedRoute>
+                        <PaymentProcessing />
                       </ProtectedRoute>
                     } 
                   />

@@ -8,7 +8,8 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f5f7fa;
   color: #333;
-  line-height: 1.6;
+  line-height: 1.5;
+  font-size: 13px;
 }
 
 .App {
@@ -30,23 +31,23 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  font-size: 24px;
+  font-size: 18px;
   color: #667eea;
 }
 
 /* Buttons */
 .btn {
-  padding: 12px 28px;
+  padding: 10px 20px;
   border: none;
   border-radius: 50px;
   cursor: pointer;
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 600;
   text-decoration: none;
   display: inline-block;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   text-align: center;
 }
 
@@ -135,10 +136,10 @@ body {
 .form-group select,
 .form-group textarea {
   width: 100%;
-  padding: 10px;
+  padding: 8px 12px;
   border: 2px solid #e0e0e0;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 13px;
   transition: border-color 0.3s;
 }
 
@@ -171,16 +172,16 @@ body {
 
 .card h2 {
   color: #2c3e50;
-  margin-bottom: 15px;
-  font-size: 22px;
+  margin-bottom: 12px;
+  font-size: 18px;
   border-bottom: 2px solid #667eea;
-  padding-bottom: 8px;
+  padding-bottom: 6px;
 }
 
 .card h3 {
   color: #34495e;
-  margin-bottom: 12px;
-  font-size: 18px;
+  margin-bottom: 10px;
+  font-size: 15px;
 }
 
 /* Grid Layouts */
@@ -214,7 +215,7 @@ table {
 
 table th,
 table td {
-  padding: 12px;
+  padding: 10px 12px;
   text-align: left;
   border-bottom: 1px solid #ecf0f1;
 }
@@ -224,8 +225,8 @@ table th {
   font-weight: 600;
   color: #2c3e50;
   text-transform: uppercase;
-  font-size: 12px;
-  letter-spacing: 1px;
+  font-size: 11px;
+  letter-spacing: 0.5px;
 }
 
 table tr:hover {
@@ -234,9 +235,9 @@ table tr:hover {
 
 /* Badges */
 .badge {
-  padding: 6px 12px;
+  padding: 4px 10px;
   border-radius: 20px;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
   display: inline-block;
@@ -320,7 +321,7 @@ table tr:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
@@ -459,7 +460,7 @@ table tr:hover {
 /* Responsive Design */
 @media (max-width: 768px) {
   .main-content {
-    padding: 16px;
+    padding: 12px;
   }
 
   .grid-2,
@@ -469,21 +470,21 @@ table tr:hover {
   }
 
   .card {
-    padding: 16px;
+    padding: 12px;
   }
 
   table {
-    font-size: 12px;
+    font-size: 11px;
   }
 
   table th,
   table td {
-    padding: 8px;
+    padding: 8px 10px;
   }
 
   .btn {
-    padding: 10px 16px;
-    font-size: 12px;
+    padding: 8px 14px;
+    font-size: 11px;
   }
 }
 
@@ -552,7 +553,7 @@ table tr:hover {
 }
 
 .navbar-brand h1 {
-  font-size: 28px;
+  font-size: 22px;
   font-weight: 700;
   margin: 0;
 }
@@ -591,7 +592,8 @@ table tr:hover {
   transition: color 0.3s;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  font-size: 13px;
 }
 
 .navbar-menu li a:hover {
@@ -615,8 +617,8 @@ table tr:hover {
   background-color: #e74c3c;
   color: white;
   border-radius: 50%;
-  padding: 2px 8px;
-  font-size: 12px;
+  padding: 2px 6px;
+  font-size: 10px;
   font-weight: bold;
 }
 
@@ -670,14 +672,14 @@ table tr:hover {
 }
 
 .footer-section h3 {
-  font-size: 24px;
-  margin-bottom: 15px;
+  font-size: 18px;
+  margin-bottom: 12px;
   color: #667eea;
 }
 
 .footer-section h4 {
-  font-size: 18px;
-  margin-bottom: 15px;
+  font-size: 14px;
+  margin-bottom: 12px;
   color: #ecf0f1;
 }
 
@@ -796,8 +798,8 @@ table tr:hover {
 }
 
 .auth-register-panel h2 {
-  margin: 24px 0 12px;
-  font-size: 40px;
+  margin: 20px 0 10px;
+  font-size: 36px;
   line-height: 1.1;
 }
 
@@ -874,7 +876,7 @@ table tr:hover {
 }
 
 .auth-register-header h1 {
-  font-size: 30px;
+  font-size: 36px;
   margin: 0 0 8px;
   color: #1f2937;
 }
@@ -997,7 +999,7 @@ table tr:hover {
   }
 
   .auth-register-panel h2 {
-    font-size: 32px;
+    font-size: 26px;
   }
 
   .auth-register-card {
@@ -1045,14 +1047,14 @@ table tr:hover {
 }
 
 .hero h1 {
-  font-size: 48px;
-  margin-bottom: 20px;
+  font-size: 36px;
+  margin-bottom: 15px;
   font-weight: 700;
 }
 
 .hero-subtitle {
-  font-size: 20px;
-  margin-bottom: 40px;
+  font-size: 16px;
+  margin-bottom: 30px;
   opacity: 0.9;
 }
 
@@ -1185,8 +1187,8 @@ table tr:hover {
 
 .section-title {
   text-align: center;
-  font-size: 32px;
-  margin-bottom: 30px;
+  font-size: 26px;
+  margin-bottom: 25px;
   color: #2c3e50;
 }
 
@@ -1218,8 +1220,9 @@ table tr:hover {
 }
 
 .feature-card h3 {
-  margin-bottom: 15px;
+  margin-bottom: 12px;
   color: #2c3e50;
+  font-size: 15px;
 }
 
 .feature-card p {
@@ -1329,11 +1332,19 @@ table tr:hover {
 
 @media (max-width: 768px) {
   .hero h1 {
-    font-size: 36px;
+    font-size: 28px;
   }
 
   .hero-subtitle {
-    font-size: 16px;
+    font-size: 14px;
+  }
+
+  .dashboard-header-text h1 {
+    font-size: 28px;
+  }
+
+  .dashboard-header-text p {
+    font-size: 14px;
   }
 
   .hero-buttons {
@@ -1362,7 +1373,7 @@ table tr:hover {
   }
 
   .section-title {
-    font-size: 28px;
+    font-size: 22px;
   }
 
   .steps {
@@ -1389,16 +1400,15 @@ table tr:hover {
   align-items: center;
   gap: 30px;
 }
-
 .dashboard-header-text h1 {
   font-size: 36px;
   color: #2c3e50;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .dashboard-header-text p {
   color: #7f8c8d;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .dashboard-header-image {
@@ -1547,31 +1557,31 @@ table tr:hover {
 }
 
 .stats-grid {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .stat-card {
   text-align: center;
-  padding: 20px;
+  padding: 15px;
 }
 
 .stat-icon {
-  font-size: 48px;
-  margin-bottom: 15px;
+  font-size: 36px;
+  margin-bottom: 12px;
 }
 
 .stat-value {
-  font-size: 32px;
+  font-size: 26px;
   font-weight: 700;
   color: #667eea;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .stat-label {
   color: #7f8c8d;
   text-transform: uppercase;
-  font-size: 12px;
-  letter-spacing: 1px;
+  font-size: 11px;
+  letter-spacing: 0.5px;
 }
 
 .card-header {
@@ -1653,8 +1663,9 @@ table tr:hover {
 
 .empty-state {
   text-align: center;
-  padding: 30px;
+  padding: 25px;
   color: #7f8c8d;
+  font-size: 13px;
 }
 
 .quick-actions {
@@ -1681,8 +1692,8 @@ table tr:hover {
 }
 
 .action-icon {
-  font-size: 32px;
-  margin-bottom: 10px;
+  font-size: 26px;
+  margin-bottom: 8px;
 }
 
 /* Profile Page Styles */
@@ -1960,7 +1971,7 @@ table tr:hover {
 
 /* Profile Page */
 .profile-page {
-  padding: 20px 0;
+  padding: 15px 0;
 }
 
 .account-details {
@@ -1994,7 +2005,7 @@ table tr:hover {
 
 /* Loan Products Page */
 .loan-products-page {
-  padding: 20px 0;
+  padding: 15px 0;
 }
 
 .page-header {
@@ -2017,7 +2028,7 @@ table tr:hover {
 
 .page-header p {
   color: #7f8c8d;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 @media (max-width: 640px) {
@@ -2026,7 +2037,7 @@ table tr:hover {
   }
 
   .page-header p {
-    font-size: 16px;
+    font-size: 14px;
   }
 }
 
@@ -2138,7 +2149,7 @@ table tr:hover {
 
 /* Loan Application Page */
 .loan-application-page {
-  padding: 20px 0;
+  padding: 15px 0;
 }
 
 .loan-summary {
@@ -2206,7 +2217,7 @@ table tr:hover {
 
 /* My Loans Page */
 .my-loans-page {
-  padding: 20px 0;
+  padding: 15px 0;
 }
 
 .loans-list {
@@ -2289,7 +2300,7 @@ table tr:hover {
 
 /* Repayment Schedule Page */
 .repayment-schedule-page {
-  padding: 20px 0;
+  padding: 15px 0;
 }
 
 .loan-summary {
@@ -2318,7 +2329,7 @@ table tr:hover {
 
 /* Payments Page */
 .payments-page {
-  padding: 20px 0;
+  padding: 15px 0;
 }
 
 .payment-methods {
@@ -2344,12 +2355,12 @@ table tr:hover {
 
 .payment-method p {
   color: #7f8c8d;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 /* Notifications Page */
 .notifications-page {
-  padding: 20px 0;
+  padding: 15px 0;
 }
 
 .notification-actions {
@@ -2370,7 +2381,7 @@ table tr:hover {
 
 .notification-stats .stat strong {
   color: #2c3e50;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .notifications-list {
